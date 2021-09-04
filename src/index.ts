@@ -46,3 +46,33 @@ export interface LancerInitiativeConfig<T extends string = string> {
   };
   activation_path?: string;
 }
+
+export function setAppearance(val: Partial<LancerInitiativeConfig["def_appearance"]>): void {
+  const defaults = CONFIG.LancerInitiative.def_appearance;
+  document.documentElement.style.setProperty(
+    "--lancer-initiative-icon-size",
+    `${val?.icon_size ?? defaults.icon_size}rem`
+  );
+  document.documentElement.style.setProperty(
+    "--lancer-initiative-player-color",
+    val?.player_color ?? defaults.player_color
+  );
+  document.documentElement.style.setProperty(
+    "--lancer-initiative-friendly-color",
+    val?.friendly_color ?? defaults.friendly_color
+  );
+  document.documentElement.style.setProperty(
+    "--lancer-initiative-neutral-color",
+    val?.neutral_color ?? defaults.neutral_color
+  );
+  document.documentElement.style.setProperty(
+    "--lancer-initiative-enemy-color",
+    val?.enemy_color ?? defaults.enemy_color
+  );
+  document.documentElement.style.setProperty(
+    "--lancer-initiative-done-color",
+    val?.done_color ?? defaults.done_color
+  );
+  game.combats?.render();
+}
+

@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BoltsJ/lib-lancer-combat-tracker.git"
+    "url": "git+https://github.com/BoltsJ/lib-lancer-initiative.git"
   },
   "keywords": [
     "foundryvtt"
