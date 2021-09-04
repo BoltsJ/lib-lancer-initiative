@@ -249,6 +249,28 @@ function getForcedDisposition(): 0 | 2 | 1 | -1 | -2 | null {
 }
 
 /**
+ * Hook this on ready to migrate existing combats
+ */
+export function addMissingDummy(): void {
+  if (!game.user?.isGM) return;
+  game.combats!.forEach(combat => {
+    if (
+      !combat.combatants.find(
+        combatant => !!combatant.getFlag(CONFIG.LancerInitiative.module, "dummy")
+      )
+    ) {
+      console.log(`${module} | Adding missing dummy combatant to combat with id ${combat.id}`);
+      combat.createEmbeddedDocuments("Combatant", [
+        {
+          flags: { [CONFIG.LancerInitiative.module]: { dummy: true, activations: { max: 0 } } },
+          hidden: true,
+        },
+      ]);
+    }
+  });
+}
+
+/**
  * Interface for the activations object
  */
 interface Activations {
