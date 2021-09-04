@@ -198,7 +198,6 @@ export class LancerCombatant extends Combatant {
   get disposition(): number {
     const module = CONFIG.LancerInitiative.module;
     return (
-      getForcedDisposition() ??
       <number>this.getFlag(module, "disposition") ??
       (this.actor?.hasPlayerOwner ?? false
         ? 2
@@ -234,18 +233,6 @@ export class LancerCombatant extends Combatant {
       },
     });
   }
-}
-
-function getForcedDisposition(): 0 | 2 | 1 | -1 | -2 | null {
-  const module = CONFIG.LancerInitiative.module;
-  return {
-    default: null,
-    PLAYER: 2 as const,
-    FRIENDLY: 1 as const,
-    NEUTRAL: 0 as const,
-    HOSTILE: -1 as const,
-    OFF: -2 as const,
-  }[<LISettings.ForcedDispositions>game.settings.get(module, "combat-tracker-force-disposition")];
 }
 
 /**
