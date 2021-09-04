@@ -1,3 +1,6 @@
+import { LancerInitiativeConfig } from "./index";
+
+declare global {
 namespace LISettings {
   type Appearance = Partial<CONFIG["LancerInitiative"]["def_appearance"]>;
   type ForcedDispositions = "default" | "PLAYER" | "FRIENDLY" | "NEUTRAL" | "HOSTILE" | "OFF";
@@ -8,18 +11,6 @@ interface LenientGlobalVariableTypes {
 }
 
 interface CONFIG {
-  LancerInitiative: {
-    module: string;
-    templatePath: string;
-    def_appearance: {
-      icon: string;
-      icon_size: number;
-      player_color: string;
-      friendly_color: string;
-      neutral_color: string;
-      enemy_color: string;
-      done_color: string;
-    };
-    activation_path: string;
-  };
+  LancerInitiative: LancerInitiativeConfig<string>;
+}
 }
