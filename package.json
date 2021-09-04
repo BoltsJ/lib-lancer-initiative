@@ -1,7 +1,7 @@
 {
-  "name": "lib-lancer-combat-tracker",
-  "version": "1.0.0",
-  "description": "NPM library providing the base functionality of lancer-initiative, now packaged as a node module",
+  "name": "lancer-initiative",
+  "version": "0.1.0",
+  "description": "Node module for a popcorn style combat tracker in Foundry VTT",
   "main": "dist/index.js",
   "scripts": {
     "prepare": "tsc",
@@ -18,9 +18,9 @@
   "author": "BoltsJ",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/BoltsJ/lib-lancer-combat-tracker/issues"
+    "url": "https://github.com/BoltsJ/lib-lancer-initiative/issues"
   },
-  "homepage": "https://github.com/BoltsJ/lib-lancer-combat-tracker#readme",
+  "homepage": "https://github.com/BoltsJ/lib-lancer-initiative#readme",
   "devDependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "^0.8.9-2",
     "prettier": "^2.3.2",
