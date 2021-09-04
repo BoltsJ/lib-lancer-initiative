@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "outDir": "./dist/",
+    "module": "es6",
+    "sourceMap": true,
+    "inlineSources": true,
+    "lib": ["ES6", "ES2017", "DOM"],
+    "types": ["@league-of-foundry-developers/foundry-vtt-types"],
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "importsNotUsedAsValues": "error",
+    "declaration": true,
+    "plugins": [{}]
+  },
+  "include": [
+      "src/"
+  ]
+}

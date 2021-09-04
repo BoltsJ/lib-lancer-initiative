@@ -1,0 +1,29 @@
+{
+  "name": "lib-lancer-combat-tracker",
+  "version": "1.0.0",
+  "description": "NPM library providing the base functionality of lancer-initiative, now packaged as a node module",
+  "main": "dist/index.js",
+  "scripts": {
+    "prepare": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BoltsJ/lib-lancer-combat-tracker.git"
+  },
+  "keywords": [
+    "foundryvtt"
+  ],
+  "author": "BoltsJ",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/BoltsJ/lib-lancer-combat-tracker/issues"
+  },
+  "homepage": "https://github.com/BoltsJ/lib-lancer-combat-tracker#readme",
+  "devDependencies": {
+    "@league-of-foundry-developers/foundry-vtt-types": "^0.8.9-2",
+    "prettier": "^2.3.2",
+    "typescript": "^4.4.2"
+  }
+}
