@@ -1,17 +1,3 @@
-/*
-declare global {
-  interface FlagConfig {
-    Combatant: {
-      [CONFIG.LancerInitiative.module]: {
-        activations?: Activations;
-        disposition?: number;
-        dummy?: boolean;
-      };
-    };
-  }
-}
-*/
-
 /**
  * Overrides and extends the Combat class to use an activation model instead of
  * the standard ordered list of turns. {@link LancerCombat#activateCombatant}
@@ -166,10 +152,12 @@ export class LancerCombatant extends Combatant {
       this.data.update({
         [`flags.${module}.activations`]: {
           max:
-            foundry.utils.getProperty(
-              this.actor?.getRollData() ?? {},
-              CONFIG.LancerInitiative.activation_path
-            ) ?? 1,
+            (CONFIG.LancerInitiative.activation_path
+              ? foundry.utils.getProperty(
+                  this.actor?.getRollData() ?? {},
+                  CONFIG.LancerInitiative.activation_path
+                )
+              : undefined) ?? 1,
         },
       });
     }
