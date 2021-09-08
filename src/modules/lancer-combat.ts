@@ -24,6 +24,7 @@ export class LancerCombat extends Combat {
     const module = CONFIG.LancerInitiative.module;
     const dummy = new CONFIG.Combatant.documentClass(
       {
+        initiative: -1,
         flags: { [module]: { dummy: true, activations: { max: 0 } } },
         hidden: true,
       },
@@ -234,7 +235,7 @@ export function addMissingDummy(): void {
         combatant => !!combatant.getFlag(CONFIG.LancerInitiative.module, "dummy")
       )
     ) {
-      console.log(`${module} | Adding missing dummy combatant to combat with id ${combat.id}`);
+      console.log(`${CONFIG.LancerInitiative.module} | Adding missing dummy combatant to combat with id ${combat.id}`);
       combat.createEmbeddedDocuments("Combatant", [
         {
           flags: { [CONFIG.LancerInitiative.module]: { dummy: true, activations: { max: 0 } } },

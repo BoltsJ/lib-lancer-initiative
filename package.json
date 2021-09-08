@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Node module for a popcorn style combat tracker in Foundry VTT",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",

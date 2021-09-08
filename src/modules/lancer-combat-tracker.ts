@@ -157,9 +157,11 @@ export function getTrackerAppearance(): CONFIG["LancerInitiative"]["def_appearan
   const config = CONFIG.LancerInitiative;
   return {
     ...config.def_appearance,
-    ...(<LISettings.Appearance>game.settings.get(config.module, "combat-tracker-appearance")),
+    ...(<Appearance>game.settings.get(config.module, "combat-tracker-appearance")),
   };
 }
+
+type Appearance = Partial<CONFIG["LancerInitiative"]["def_appearance"]>;
 
 /**
  * Register the helper we use to print the icon the correnct number of times
