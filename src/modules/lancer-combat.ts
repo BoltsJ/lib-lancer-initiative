@@ -89,11 +89,9 @@ export class LancerCombat extends Combat {
    * {@link LancerCombat#requestActivation()} if the user does not have
    * permission to modify the combat
    */
-  async activateCombatant(id: string): Promise<this | undefined> {
-    if (!game.user?.isGM) return this.requestActivation(id);
-    const combatant: LancerCombatant | undefined = <LancerCombatant | undefined>(
-      this.getEmbeddedDocument("Combatant", id)
-    );
+  async activateCombatant(id: string, override = false): Promise<this | undefined> {
+    if (!game.user?.isGM && !override) return this.requestActivation(id);
+    const combatant = <LancerCombatant | undefined>this.getEmbeddedDocument("Combatant", id);
     if (!combatant?.activations.value) return this;
     await combatant?.modifyCurrentActivations(-1);
     const turn = this.turns.findIndex(t => t.id === id);
