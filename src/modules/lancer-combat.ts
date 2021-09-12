@@ -4,8 +4,7 @@
  * is added to the interface.
  */
 export class LancerCombat extends Combat {
-  /** @override */
-  protected _sortCombatants(a: LancerCombatant, b: LancerCombatant): number {
+  protected override _sortCombatants(a: LancerCombatant, b: LancerCombatant): number {
     const module = CONFIG.LancerInitiative.module;
     if (a.getFlag(module, "dummy") ?? false) return -1;
     if (b.getFlag(module, "dummy") ?? false) return 1;
@@ -15,11 +14,8 @@ export class LancerCombat extends Combat {
     return super._sortCombatants(a, b);
   }
 
-  /** @override */
-  protected async _preCreate(
-    data: Parameters<Combat["_preCreate"]>[0],
-    options: Parameters<Combat["_preCreate"]>[1],
-    user: foundry.documents.BaseUser
+  protected override async _preCreate(
+    ...[data, options, user]: Parameters<Combat["_preCreate"]>
   ): Promise<void> {
     const module = CONFIG.LancerInitiative.module;
     const dummy = new CONFIG.Combatant.documentClass(
@@ -57,28 +53,24 @@ export class LancerCombat extends Combat {
     return <Promise<LancerCombatant[]>>this.updateEmbeddedDocuments("Combatant", updates);
   }
 
-  /** @override */
-  async startCombat(): Promise<this | undefined> {
+  override async startCombat(): Promise<this | undefined> {
     await this.resetActivations();
     return super.startCombat();
   }
 
-  /** @override */
-  async nextRound(): Promise<this | undefined> {
+  override async nextRound(): Promise<this | undefined> {
     await this.resetActivations();
     return super.nextRound();
   }
 
   /**
    * Ends the current turn without starting a new one
-   * @override
    */
-  async nextTurn(): Promise<this | undefined> {
+  override async nextTurn(): Promise<this | undefined> {
     return this.update({ turn: 0 });
   }
 
-  /** @override */
-  async previousRound(): Promise<this | undefined> {
+  override async previousRound(): Promise<this | undefined> {
     await this.resetActivations();
     const round = Math.max(this.round - 1, 0);
     let advanceTime = 0;
@@ -87,8 +79,7 @@ export class LancerCombat extends Combat {
     return this.update({ round, turn: 0 }, { advanceTime });
   }
 
-  /** @override */
-  async resetAll(): Promise<this | undefined> {
+  override async resetAll(): Promise<this | undefined> {
     await this.resetActivations();
     return super.resetAll();
   }
@@ -134,18 +125,14 @@ export class LancerCombatant extends Combatant {
   /**
    * This just fixes a bug in foundry 0.8.x that prevents Combatants with no
    * associated token or actor from being modified, even by the GM
-   * @override
    */
-  testUserPermission(
-    user: User,
-    permission: keyof typeof foundry.CONST.ENTITY_PERMISSIONS | foundry.CONST.EntityPermission,
-    options?: { exact?: boolean }
+  override testUserPermission(
+    ...[user, permission, options]: Parameters<Combatant["testUserPermission"]>
   ): boolean {
     return this.actor?.testUserPermission(user, permission, options) ?? user.isGM;
   }
 
-  /** @override */
-  prepareBaseData(): void {
+  override prepareBaseData(): void {
     super.prepareBaseData();
     const module = CONFIG.LancerInitiative.module;
     // @ts-expect-error
@@ -164,8 +151,7 @@ export class LancerCombatant extends Combatant {
     }
   }
 
-  /** @override */
-  get isVisible(): boolean {
+  override get isVisible(): boolean {
     const module = CONFIG.LancerInitiative.module;
     if (this.getFlag(module, "dummy") ?? false) return false;
     return super.isVisible;
@@ -235,7 +221,9 @@ export function addMissingDummy(): void {
         combatant => !!combatant.getFlag(CONFIG.LancerInitiative.module, "dummy")
       )
     ) {
-      console.log(`${CONFIG.LancerInitiative.module} | Adding missing dummy combatant to combat with id ${combat.id}`);
+      console.log(
+        `${CONFIG.LancerInitiative.module} | Adding missing dummy combatant to combat with id ${combat.id}`
+      );
       combat.createEmbeddedDocuments("Combatant", [
         {
           flags: { [CONFIG.LancerInitiative.module]: { dummy: true, activations: { max: 0 } } },

@@ -9,8 +9,7 @@ export class LancerInitiativeConfigForm extends FormApplication<
   FormApplication.Options,
   Appearance
 > {
-  /** @override */
-  static get defaultOptions(): FormApplication.Options {
+  static override get defaultOptions(): FormApplication.Options {
     return {
       ...super.defaultOptions,
       title: "Lancer Intiative",
@@ -20,13 +19,11 @@ export class LancerInitiativeConfigForm extends FormApplication<
     };
   }
 
-  /** @override */
-  getData(): Appearance {
+  override getData(): Appearance {
     return getTrackerAppearance();
   }
 
-  /** @override */
-  activateListeners(html: JQuery<HTMLElement>): void {
+  override activateListeners(html: JQuery<HTMLElement>): void {
     super.activateListeners(html);
 
     //update the preview icon
@@ -52,8 +49,7 @@ export class LancerInitiativeConfigForm extends FormApplication<
     html.find('button[name="reset"]').on("click", this.resetSettings.bind(this));
   }
 
-  /** @override */
-  async _updateObject(_: Event, data: Record<string, unknown>): Promise<void> {
+  override async _updateObject(_: Event, data: Record<string, unknown>): Promise<void> {
     const config = CONFIG.LancerInitiative;
     game.settings.set(
       config.module,

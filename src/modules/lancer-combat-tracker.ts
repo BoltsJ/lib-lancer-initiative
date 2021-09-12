@@ -6,8 +6,7 @@ import type { LancerCombat, LancerCombatant } from "./lancer-combat.js";
  * buttons and either move or remove the initiative button
  */
 export class LancerCombatTracker extends CombatTracker {
-  /** @override */
-  static get defaultOptions(): CombatTracker.Options {
+  static override get defaultOptions(): CombatTracker.Options {
     return {
       ...super.defaultOptions,
       template: CONFIG.LancerInitiative.templatePath,
@@ -19,9 +18,8 @@ export class LancerCombatTracker extends CombatTracker {
    * optionally sorts the the turn data that gets displayed. This allows the
    * units that have already gone to be moved to the bottom without the risk of
    * updateCombat events being eaten.
-   * @override
    */
-  async getData(options?: Application.RenderOptions): Promise<CombatTracker.Data> {
+  override async getData(options?: Application.RenderOptions): Promise<CombatTracker.Data> {
     const config = CONFIG.LancerInitiative;
     const appearance = getTrackerAppearance();
     const data = (await super.getData(options)) as {
@@ -70,8 +68,7 @@ export class LancerCombatTracker extends CombatTracker {
     return <CombatTracker.Data>data;
   }
 
-  /** @override */
-  activateListeners(html: JQuery<HTMLElement>): void {
+  override activateListeners(html: JQuery<HTMLElement>): void {
     super.activateListeners(html);
     html.find(".lancer-combat-control").on("click", this._onActivateCombatant.bind(this));
   }
@@ -118,8 +115,7 @@ export class LancerCombatTracker extends CombatTracker {
     await combatant.modifyCurrentActivations(1);
   }
 
-  /** @override */
-  protected _getEntryContextOptions(): {
+  protected override _getEntryContextOptions(): {
     name: string;
     icon: string;
     callback: (...args: any) => unknown;
