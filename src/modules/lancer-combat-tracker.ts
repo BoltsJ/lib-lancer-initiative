@@ -19,7 +19,7 @@ export class LancerCombatTracker extends CombatTracker {
    * units that have already gone to be moved to the bottom without the risk of
    * updateCombat events being eaten.
    */
-  override async getData(options?: Application.RenderOptions): Promise<CombatTracker.Data> {
+  override async getData(options?: Partial<CombatTracker.Options>): Promise<CombatTracker.Data> {
     const config = CONFIG.LancerInitiative;
     const appearance = getTrackerAppearance();
     const data = (await super.getData(options)) as {
