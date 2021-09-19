@@ -46,7 +46,7 @@ Add the following css rules:
   color: var(--lancer-initiative-enemy-color);
 }
 ```
-Additional reccomended rules can be found in the Lancer Intiative main repository.
+Additional reccomended rules can be found in the Lancer Intiative main repository, as well as an example configuration form.
 
 Add the translations data from the main repository to your system's translation files.
 
@@ -80,9 +80,9 @@ Hooks.on("init", () => {
     },
   };
   Object.defineProperty(CONFIG.LancerInitiative, "module", { writable: false });
-  
+
   registerSettings();
-  
+
   // Recommended
   Hooks.callAll("LancerIntitiativeInit");
   setAppearance(getTrackerAppearance());
