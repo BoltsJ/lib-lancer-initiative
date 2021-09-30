@@ -74,4 +74,3 @@ export function setAppearance(val: Partial<LancerInitiativeConfig["def_appearanc
   );
   game.combats?.render();
 }
-

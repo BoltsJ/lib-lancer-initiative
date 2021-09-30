@@ -224,7 +224,12 @@ export function addMissingDummy(): void {
       );
       combat.createEmbeddedDocuments("Combatant", [
         {
-          flags: { [CONFIG.LancerInitiative.module]: { dummy: true, activations: { max: 0 } } },
+          flags: {
+            [CONFIG.LancerInitiative.module]: {
+              dummy: true,
+              activations: { max: 0 },
+            },
+          },
           hidden: true,
         },
       ]);

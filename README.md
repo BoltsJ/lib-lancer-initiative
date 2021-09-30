@@ -1,11 +1,13 @@
 # lancer-initiative
+
 NPM module for Lancer Initiative
 
-A module providing Combat, Combatant and CombatTracker classes compatible with foundry 0.8.x that can be used to implement a popcorn style combat tracker in your Foundry VTT system. 
+A module providing Combat, Combatant and CombatTracker classes compatible with foundry 0.8.x that can be used to implement a popcorn style combat tracker in your Foundry VTT system.
 
 ## Instructions
 
 Install with npm
+
 ```
 $ npm install lancer-initiative
 ```
@@ -13,6 +15,7 @@ $ npm install lancer-initiative
 Create or copy the necessary handlebars templates. Examples can be found in the main [Lancer Intiative module repository](https://github.com/BoltsJ/lancer-initiative/tree/module-refactor/public/templates).
 
 Add the following css rules:
+
 ```css
 :root {
   --lancer-initiative-icon-size: 1rem;
@@ -46,6 +49,7 @@ Add the following css rules:
   color: var(--lancer-initiative-enemy-color);
 }
 ```
+
 Additional reccomended rules can be found in the Lancer Intiative main repository, as well as an example configuration form.
 
 Add the translations data from the main repository to your system's translation files.
@@ -63,7 +67,12 @@ declare global {
 }
 
 // entrypoint.ts
-import { LancerCombat, LancerCombatant, getTrackerAppearance, setAppaearance } from "lancer-initiative";
+import {
+  LancerCombat,
+  LancerCombatant,
+  getTrackerAppearance,
+  setAppaearance,
+} from "lancer-initiative";
 
 Hooks.on("init", () => {
   CONFIG.LancerInitiative = {
@@ -81,9 +90,32 @@ Hooks.on("init", () => {
   };
   Object.defineProperty(CONFIG.LancerInitiative, "module", { writable: false });
 
-  registerSettings();
+  game.settings.register(game.system.id, "combat-tracker-appearance", {
+    scope: "world",
+    config: false,
+    type: Object,
+    onChange: setAppearance,
+  });
+  game.settings.register(game.system.id, "combat-tracker-sort", {
+    name: game.i18n.localize("LANCERINITIATIVE.SortTracker"),
+    hint: game.i18n.localize("LANCERINITIATIVE.SortTrackerDesc"),
+    scope: "world",
+    config: true,
+    type: Boolean,
+    onChange: () => game.combats?.render(),
+    default: false,
+  });
+  game.settings.register(game.system.id, "combat-tracker-enable-initiative", {
+    name: game.i18n.localize("LANCERINITIATIVE.EnableInitiative"),
+    hint: game.i18n.localize("LANCERINITIATIVE.EnableInitiativeDesc"),
+    scope: "world",
+    config: false, // Set true if you want initiative rolling to be configurable
+    type: Boolean,
+    onChange: () => game.combats?.render(),
+    default: false, // Set true if you want initiative rolling
+  });
 
-  // Recommended
+  // Recommended to allow integrations to set up
   Hooks.callAll("LancerIntitiativeInit");
   setAppearance(getTrackerAppearance());
 });
