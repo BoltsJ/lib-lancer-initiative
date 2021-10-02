@@ -156,9 +156,17 @@ export class LancerCombatant extends Combatant {
   }
 
   override get isVisible(): boolean {
+    // v8 compatibility
     const module = CONFIG.LancerInitiative.module;
     if (this.getFlag(module, "dummy") ?? false) return false;
     return super.isVisible;
+  }
+
+  override get visible(): boolean {
+    // v9 compatibility
+    const module = CONFIG.LancerInitiative.module;
+    if (this.getFlag(module, "dummy") ?? false) return false;
+    return super.visible;
   }
 
   /**
