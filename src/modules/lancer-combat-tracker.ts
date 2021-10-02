@@ -1,5 +1,4 @@
 import type { LancerCombat, LancerCombatant } from "./lancer-combat.js";
-// Make game always defiend without the global
 
 /**
  * Overrides the display of the combat and turn order tab to add activation
@@ -9,7 +8,7 @@ export class LancerCombatTracker extends CombatTracker {
   static override get defaultOptions(): CombatTracker.Options {
     return {
       ...super.defaultOptions,
-      template: CONFIG.LancerInitiative.templatePath,
+      template: CONFIG.LancerInitiative.templatePath!,
     };
   }
 
@@ -61,10 +60,7 @@ export class LancerCombatTracker extends CombatTracker {
       });
     }
     data.icon_class = appearance.icon;
-    data.enable_initiative = game.settings.get(
-      config.module,
-      "combat-tracker-enable-initiative"
-    ) as boolean;
+    data.enable_initiative = CONFIG.LancerInitiative.enable_initiative ?? false;
     return <CombatTracker.Data>data;
   }
 
@@ -149,8 +145,10 @@ export class LancerCombatTracker extends CombatTracker {
 /**
  * Get the current appearance data from settings
  */
-export function getTrackerAppearance(): CONFIG["LancerInitiative"]["def_appearance"] {
+export function getTrackerAppearance(): NonNullable<CONFIG["LancerInitiative"]["def_appearance"]> {
   const config = CONFIG.LancerInitiative;
+  if (!config.def_appearance)
+    throw new Error("No default appearance specified in CONFIG.LancerInitiative");
   return {
     ...config.def_appearance,
     ...(<Appearance>game.settings.get(config.module, "combat-tracker-appearance")),

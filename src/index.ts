@@ -2,10 +2,13 @@ export * from "./modules/lancer-combat";
 export * from "./modules/lancer-combat-tracker";
 /**
  * Interface for the CONFIG object
+ *
+ * @typeParam T - System or module name
+
  * @example
  * ```typescript
  * // global.d.ts
- * import { LancerInitiativeConfig } from "lancer-initiative";
+ * import type { LancerInitiativeConfig } from "lancer-initiative";
  *
  * declare global {
  *   interface CONFIG {
@@ -27,14 +30,27 @@ export * from "./modules/lancer-combat-tracker";
  *       enemy_color: "#d98f30",
  *       done_color: "#444444",
  *     },
- *     activation_path: "attributes.activations", // set to the path in getRollData for the number of activation per round
+ *     activations: "attributes.activations", // set to the path in getRollData for the number of activation per round
+ *     enable_initiative: true, // Only needed if intiative rolling is used
  *   };
  * ```
  */
 export interface LancerInitiativeConfig<T extends string = string> {
+  /**
+   * Namespace for flags and settings. Should be the id of the system or
+   * module.
+   */
   module: T;
-  templatePath: string;
-  def_appearance: {
+  /**
+   * Filepath to the handlebars template for LancerCombatTracker. Can be
+   * omitted if LancerCombatTracker is not used.
+   */
+  templatePath?: string;
+  /**
+   * Default appearance settings for LancerCombatTracker. Can be omitted if
+   * LancerCombatTracker is not used.
+   */
+  def_appearance?: {
     icon: string;
     icon_size: number;
     player_color: string;
@@ -43,11 +59,23 @@ export interface LancerInitiativeConfig<T extends string = string> {
     enemy_color: string;
     done_color: string;
   };
-  activation_path?: string;
+  /**
+   * Activations for each unit.  If a string, path to the activation parameter
+   * in actor.getRollData(), if a number, that value. Otherwise 1
+   * @defaultValue `1`
+   */
+  activations?: string | number;
+  /**
+   * Whether to enable the initiative rolling buttons in the tracker. Only
+   * needed if LancerCombatTracker or a subclass is used for the tracker and
+   * intitaitve rolling is wanted.
+   * @defaultValue `false`
+   */
+  enable_initiative?: boolean;
 }
 
 export function setAppearance(val: Partial<LancerInitiativeConfig["def_appearance"]>): void {
-  const defaults = CONFIG.LancerInitiative.def_appearance;
+  const defaults = CONFIG.LancerInitiative.def_appearance!;
   document.documentElement.style.setProperty(
     "--lancer-initiative-icon-size",
     `${val?.icon_size ?? defaults.icon_size}rem`

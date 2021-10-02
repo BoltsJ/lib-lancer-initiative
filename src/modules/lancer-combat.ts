@@ -135,17 +135,23 @@ export class LancerCombatant extends Combatant {
     const module = CONFIG.LancerInitiative.module;
     // @ts-expect-error
     if (this.data.flags?.[module]?.activations?.max === undefined && canvas?.ready) {
-      this.data.update({
-        [`flags.${module}.activations`]: {
-          max:
-            (CONFIG.LancerInitiative.activation_path
-              ? foundry.utils.getProperty(
-                  this.actor?.getRollData() ?? {},
-                  CONFIG.LancerInitiative.activation_path
-                )
-              : undefined) ?? 1,
-        },
-      });
+      let activations: number;
+      switch (typeof CONFIG.LancerInitiative.activations) {
+        case "string":
+          activations =
+            foundry.utils.getProperty(
+              this.actor?.getRollData() ?? {},
+              CONFIG.LancerInitiative.activations
+            ) ?? 1;
+          break;
+        case "number":
+          activations = CONFIG.LancerInitiative.activations;
+          break;
+        default:
+          activations = 1;
+          break;
+      }
+      this.data.update({ [`flags.${module}.activations`]: { max: activations } });
     }
   }
 
