@@ -14,45 +14,7 @@ $ npm install lancer-initiative
 
 Create or copy the necessary handlebars templates. Examples can be found in the main [Lancer Intiative module repository](https://github.com/BoltsJ/lancer-initiative/tree/module-refactor/public/templates).
 
-Add the following css rules:
-
-```css
-:root {
-  --lancer-initiative-icon-size: 1rem;
-  --lancer-initiative-player-color: #000000;
-  --lancer-initiative-friendly-color: #000000;
-  --lancer-initiative-neutral-color: #000000;
-  --lancer-initiative-enemy-color: #000000;
-  --lancer-initiative-done-color: #000000;
-}
-
-#combat #combat-tracker .combatant .token-initiative i,
-#combat #combat-tracker .combatant .token-initiative a {
-  font-size: var(--lancer-initiative-icon-size);
-}
-#combat #combat-tracker .combatant .token-initiative i.done {
-  color: var(--lancer-initiative-done-color);
-}
-
-#combat #combat-tracker .combatant.player .token-initiative a {
-  color: var(--lancer-initiative-player-color);
-}
-
-#combat #combat-tracker .combatant.friendly .token-initiative a {
-  color: var(--lancer-initiative-friendly-color);
-}
-#combat #combat-tracker .combatant.neutral .token-initiative a {
-  color: var(--lancer-initiative-neutral-color);
-}
-
-#combat #combat-tracker .combatant.enemy .token-initiative a {
-  color: var(--lancer-initiative-enemy-color);
-}
-```
-
-Additional reccomended rules can be found in the Lancer Intiative main repository, as well as an example configuration form.
-
-Add the translations data from the main repository to your system's translation files.
+Css rules for the tracker can be found in the Lancer Intiative main repository, as well as an example configuration form.
 
 Configure your system to use the classes. This exapmle assumes you are using [`@league-of-foundry-developers/foundry-vtt-types`](https://github.com/League-of-Foundry-Developers/foundry-vtt-types).
 
@@ -88,8 +50,9 @@ Hooks.on("init", () => {
       done_color: "#444444",
     },
   };
-  Object.defineProperty(CONFIG.LancerInitiative, "module", { writable: false });
 
+  // A config form for this can be found at
+  // https://github.com/BoltsJ/lancer-initiative
   game.settings.register(game.system.id, "combat-tracker-appearance", {
     scope: "world",
     config: false,
@@ -104,15 +67,6 @@ Hooks.on("init", () => {
     type: Boolean,
     onChange: () => game.combats?.render(),
     default: false,
-  });
-  game.settings.register(game.system.id, "combat-tracker-enable-initiative", {
-    name: game.i18n.localize("LANCERINITIATIVE.EnableInitiative"),
-    hint: game.i18n.localize("LANCERINITIATIVE.EnableInitiativeDesc"),
-    scope: "world",
-    config: false, // Set true if you want initiative rolling to be configurable
-    type: Boolean,
-    onChange: () => game.combats?.render(),
-    default: false, // Set true if you want initiative rolling
   });
 
   // Recommended to allow integrations to set up
