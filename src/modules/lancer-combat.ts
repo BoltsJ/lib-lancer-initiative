@@ -4,7 +4,10 @@
  * is added to the interface.
  */
 export class LancerCombat extends Combat {
-  protected override _sortCombatants(a: LancerCombatant, b: LancerCombatant): number {
+  protected override _sortCombatants(
+    a: LancerCombatant,
+    b: LancerCombatant
+  ): number {
     const module = CONFIG.LancerInitiative.module;
     if (a.getFlag(module, "dummy") ?? false) return -1;
     if (b.getFlag(module, "dummy") ?? false) return 1;
@@ -44,13 +47,16 @@ export class LancerCombat extends Combat {
           this.settings.skipDefeated &&
           (c.data.defeated ||
             !!c.actor?.effects.find(
-              e => e.getFlag("core", "statusId") === CONFIG.Combat.defeatedStatusId
+              e =>
+                e.getFlag("core", "statusId") === CONFIG.Combat.defeatedStatusId
             ))
             ? 0
             : (<LancerCombatant>c).activations.max ?? 0,
       };
     });
-    return <Promise<LancerCombatant[]>>this.updateEmbeddedDocuments("Combatant", updates);
+    return <Promise<LancerCombatant[]>>(
+      this.updateEmbeddedDocuments("Combatant", updates)
+    );
   }
 
   override async startCombat(): Promise<this | undefined> {
@@ -89,9 +95,14 @@ export class LancerCombat extends Combat {
    * {@link LancerCombat#requestActivation()} if the user does not have
    * permission to modify the combat
    */
-  async activateCombatant(id: string, override = false): Promise<this | undefined> {
+  async activateCombatant(
+    id: string,
+    override = false
+  ): Promise<this | undefined> {
     if (!game.user?.isGM && !override) return this.requestActivation(id);
-    const combatant = <LancerCombatant | undefined>this.getEmbeddedDocument("Combatant", id);
+    const combatant = <LancerCombatant | undefined>(
+      this.getEmbeddedDocument("Combatant", id)
+    );
     if (!combatant?.activations.value) return this;
     await combatant?.modifyCurrentActivations(-1);
     const turn = this.turns.findIndex(t => t.id === id);
@@ -106,7 +117,11 @@ export class LancerCombat extends Combat {
   async deactivateCombatant(id: string) {
     const turn = this.turns.findIndex(t => t.id === id);
     if (turn !== this.turn) return this;
-    if (!this.turns[turn].testUserPermission(game.user!, "OWNER") && !game.user?.isGM) return this;
+    if (
+      !this.turns[turn].testUserPermission(game.user!, "OWNER") &&
+      !game.user?.isGM
+    )
+      return this;
     return this.nextTurn();
   }
 
@@ -127,14 +142,19 @@ export class LancerCombatant extends Combatant {
   override testUserPermission(
     ...[user, permission, options]: Parameters<Combatant["testUserPermission"]>
   ): boolean {
-    return this.actor?.testUserPermission(user, permission, options) ?? user.isGM;
+    return (
+      this.actor?.testUserPermission(user, permission, options) ?? user.isGM
+    );
   }
 
   override prepareBaseData(): void {
     super.prepareBaseData();
     const module = CONFIG.LancerInitiative.module;
-    // @ts-expect-error
-    if (this.data.flags?.[module]?.activations?.max === undefined && canvas?.ready) {
+    if (
+      // @ts-expect-error
+      this.data.flags?.[module]?.activations?.max === undefined &&
+      canvas?.ready
+    ) {
       let activations: number;
       switch (typeof CONFIG.LancerInitiative.activations) {
         case "string":
@@ -151,7 +171,9 @@ export class LancerCombatant extends Combatant {
           activations = 1;
           break;
       }
-      this.data.update({ [`flags.${module}.activations`]: { max: activations } });
+      this.data.update({
+        [`flags.${module}.activations`]: { max: activations },
+      });
     }
   }
 
@@ -188,7 +210,9 @@ export class LancerCombatant extends Combatant {
       <number>this.getFlag(module, "disposition") ??
       (this.actor?.hasPlayerOwner ?? false
         ? 2
-        : this.token?.data.disposition ?? this.actor?.data.token.disposition ?? -2)
+        : this.token?.data.disposition ??
+          this.actor?.data.token.disposition ??
+          -2)
     );
   }
 
@@ -216,7 +240,11 @@ export class LancerCombatant extends Combatant {
     if (num === 0) return this;
     return this.update({
       [`flags.${module}.activations`]: {
-        value: Math.clamped((this.activations?.value ?? 0) + num, 0, this.activations?.max ?? 1),
+        value: Math.clamped(
+          (this.activations?.value ?? 0) + num,
+          0,
+          this.activations?.max ?? 1
+        ),
       },
     });
   }
@@ -230,7 +258,7 @@ export function addMissingDummy(): void {
   game.combats!.forEach(combat => {
     if (
       !combat.combatants.find(
-        combatant => !!combatant.getFlag(CONFIG.LancerInitiative.module, "dummy")
+        c => !!c.getFlag(CONFIG.LancerInitiative.module, "dummy")
       )
     ) {
       console.log(

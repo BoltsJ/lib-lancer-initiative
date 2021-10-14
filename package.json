@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/BoltsJ/lib-lancer-initiative#readme",
   "devDependencies": {
-    "@league-of-foundry-developers/foundry-vtt-types": "^0.8.9-4",
+    "@league-of-foundry-developers/foundry-vtt-types": "^0.8.9-6",
     "prettier": "^2.4.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.4"
   }
 }

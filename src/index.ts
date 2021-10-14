@@ -74,7 +74,9 @@ export interface LancerInitiativeConfig<T extends string = string> {
   enable_initiative?: boolean;
 }
 
-export function setAppearance(val: Partial<LancerInitiativeConfig["def_appearance"]>): void {
+export function setAppearance(
+  val: Partial<LancerInitiativeConfig["def_appearance"]>
+): void {
   const defaults = CONFIG.LancerInitiative.def_appearance!;
   document.documentElement.style.setProperty(
     "--lancer-initiative-icon-size",

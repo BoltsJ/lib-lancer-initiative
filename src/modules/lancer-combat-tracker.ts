@@ -18,7 +18,9 @@ export class LancerCombatTracker extends CombatTracker {
    * units that have already gone to be moved to the bottom without the risk of
    * updateCombat events being eaten.
    */
-  override async getData(options?: Partial<CombatTracker.Options>): Promise<CombatTracker.Data> {
+  override async getData(
+    options?: Partial<CombatTracker.Options>
+  ): Promise<CombatTracker.Data> {
     const config = CONFIG.LancerInitiative;
     const appearance = getTrackerAppearance();
     const data = (await super.getData(options)) as {
@@ -30,7 +32,10 @@ export class LancerCombatTracker extends CombatTracker {
       }[];
       [x: string]: unknown;
     };
-    const sort = game.settings.get(config.module, "combat-tracker-sort") as boolean;
+    const sort = game.settings.get(
+      config.module,
+      "combat-tracker-sort"
+    ) as boolean;
     const disp: Record<number, string> = {
       [-2]: "",
       [-1]: "enemy",
@@ -46,7 +51,9 @@ export class LancerCombatTracker extends CombatTracker {
         ...t,
         css: t.css + " " + disp[combatant?.disposition ?? -2],
         pending: combatant?.activations.value ?? 0,
-        finished: (combatant?.activations.max ?? 1) - (combatant?.activations.value ?? 0),
+        finished:
+          (combatant?.activations.max ?? 1) -
+          (combatant?.activations.value ?? 0),
       };
     });
     if (sort) {
@@ -66,7 +73,9 @@ export class LancerCombatTracker extends CombatTracker {
 
   override activateListeners(html: JQuery<HTMLElement>): void {
     super.activateListeners(html);
-    html.find(".lancer-combat-control").on("click", this._onActivateCombatant.bind(this));
+    html
+      .find(".lancer-combat-control")
+      .on("click", this._onActivateCombatant.bind(this));
   }
 
   /**
@@ -111,33 +120,29 @@ export class LancerCombatTracker extends CombatTracker {
     await combatant.modifyCurrentActivations(1);
   }
 
-  protected override _getEntryContextOptions(): {
-    name: string;
-    icon: string;
-    callback: (...args: any) => unknown;
-  }[] {
-    const m: {
-      name: string;
-      icon: string;
-      callback: (...args: any) => unknown;
-    }[] = [
+  protected override _getEntryContextOptions(): ContextMenuEntry[] {
+    const m: ContextMenuEntry[] = [
       {
-        name: game.i18n.localize("LANCERINITIATIVE.AddActivation"),
+        name: "LANCERINITIATIVE.AddActivation",
         icon: '<i class="fas fa-plus"></i>',
         callback: this._onAddActivation.bind(this),
       },
       {
-        name: game.i18n.localize("LANCERINITIATIVE.RemoveActivation"),
+        name: "LANCERINITIATIVE.RemoveActivation",
         icon: '<i class="fas fa-minus"></i>',
         callback: this._onRemoveActivation.bind(this),
       },
       {
-        name: game.i18n.localize("LANCERINITIATIVE.UndoActivation"),
+        name: "LANCERINITIATIVE.UndoActivation",
         icon: '<i class="fas fa-undo"></i>',
         callback: this._onUndoActivation.bind(this),
       },
     ];
-    m.push(...super._getEntryContextOptions().filter(i => i.name !== "COMBAT.CombatantReroll"));
+    m.push(
+      ...super
+        ._getEntryContextOptions()
+        .filter(i => i.name !== "COMBAT.CombatantReroll")
+    );
     return m;
   }
 }
@@ -145,13 +150,20 @@ export class LancerCombatTracker extends CombatTracker {
 /**
  * Get the current appearance data from settings
  */
-export function getTrackerAppearance(): NonNullable<CONFIG["LancerInitiative"]["def_appearance"]> {
+export function getTrackerAppearance(): NonNullable<
+  CONFIG["LancerInitiative"]["def_appearance"]
+> {
   const config = CONFIG.LancerInitiative;
   if (!config.def_appearance)
-    throw new Error("No default appearance specified in CONFIG.LancerInitiative");
+    throw new Error(
+      "No default appearance specified in CONFIG.LancerInitiative"
+    );
   return {
     ...config.def_appearance,
-    ...(<Appearance>game.settings.get(config.module, "combat-tracker-appearance")),
+    ...(game.settings.get(
+      config.module,
+      "combat-tracker-appearance"
+    ) as Appearance),
   };
 }
 
