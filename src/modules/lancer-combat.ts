@@ -8,9 +8,6 @@ export class LancerCombat extends Combat {
     a: LancerCombatant,
     b: LancerCombatant
   ): number {
-    const module = CONFIG.LancerInitiative.module;
-    if (a.getFlag(module, "dummy") ?? false) return -1;
-    if (b.getFlag(module, "dummy") ?? false) return 1;
     // Sort by Players then Neutrals then Hostiles
     const dc = b.disposition - a.disposition;
     if (dc !== 0) return dc;
@@ -20,18 +17,7 @@ export class LancerCombat extends Combat {
   protected override async _preCreate(
     ...[data, options, user]: Parameters<Combat["_preCreate"]>
   ): Promise<void> {
-    const module = CONFIG.LancerInitiative.module;
-    const dummy = new CONFIG.Combatant.documentClass(
-      {
-        initiative: -1,
-        flags: { [module]: { dummy: true, activations: { max: 0 } } },
-        hidden: true,
-      },
-      { parent: this }
-    );
-    const combatants = this.combatants.map(c => c.toObject());
-    combatants.push(dummy.toObject());
-    this.data.update({ combatants });
+    this.data.update({ turn: null });
     return super._preCreate(data, options, user);
   }
 
@@ -63,19 +49,22 @@ export class LancerCombat extends Combat {
 
   override async startCombat(): Promise<this | undefined> {
     await this.resetActivations();
-    return super.startCombat();
+    return this.update({ round: 1, turn: null });
   }
 
   override async nextRound(): Promise<this | undefined> {
     await this.resetActivations();
-    return super.nextRound();
+    let advanceTime = Math.max(this.turns.length - (this.data.turn || 0), 0) * CONFIG.time.turnTime;
+    advanceTime += CONFIG.time.roundTime;
+    // @ts-ignore jtfc advanceTime is fucking used in foundry.js
+    return this.update({round: this.round + 1, turn: null}, {advanceTime});
   }
 
   /**
    * Ends the current turn without starting a new one
    */
   override async nextTurn(): Promise<this | undefined> {
-    return this.update({ turn: 0 });
+    return this.update({ turn: null });
   }
 
   override async previousRound(): Promise<this | undefined> {
@@ -84,7 +73,7 @@ export class LancerCombat extends Combat {
     let advanceTime = 0;
     if (round > 0) advanceTime -= CONFIG.time.roundTime;
     // @ts-ignore jtfc advanceTime is fucking used in foundry.js
-    return this.update({ round, turn: 0 }, { advanceTime });
+    return this.update({ round, turn: null }, { advanceTime });
   }
 
   override async resetAll(): Promise<this | undefined> {
@@ -180,23 +169,6 @@ export class LancerCombatant extends Combatant {
   }
 
   /**
-   * @deprecated since v9
-   */
-  override get isVisible(): boolean {
-    // v8 compatibility
-    const module = CONFIG.LancerInitiative.module;
-    if (this.getFlag(module, "dummy") ?? false) return false;
-    return super.isVisible;
-  }
-
-  override get visible(): boolean {
-    // v9 compatibility
-    const module = CONFIG.LancerInitiative.module;
-    if (this.getFlag(module, "dummy") ?? false) return false;
-    return super.visible;
-  }
-
-  /**
    * The current activation data for the combatant.
    */
   get activations(): Activations {
@@ -257,31 +229,11 @@ export class LancerCombatant extends Combatant {
 
 /**
  * Hook this on ready to migrate existing combats
+ * This no longer does anything as dummy combatants are no longer used.
+ * @deprecated since 2.0.0
  */
 export function addMissingDummy(): void {
-  if (!game.user?.isGM) return;
-  game.combats!.forEach(combat => {
-    if (
-      !combat.combatants.find(
-        c => !!c.getFlag(CONFIG.LancerInitiative.module, "dummy")
-      )
-    ) {
-      console.log(
-        `${CONFIG.LancerInitiative.module} | Adding missing dummy combatant to combat with id ${combat.id}`
-      );
-      combat.createEmbeddedDocuments("Combatant", [
-        {
-          flags: {
-            [CONFIG.LancerInitiative.module]: {
-              dummy: true,
-              activations: { max: 0 },
-            },
-          },
-          hidden: true,
-        },
-      ]);
-    }
-  });
+  return;
 }
 
 /**
