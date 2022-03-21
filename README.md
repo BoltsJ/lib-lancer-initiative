@@ -2,7 +2,7 @@
 
 NPM module for Lancer Initiative
 
-A module providing Combat, Combatant and CombatTracker classes compatible with foundry 0.8.x that can be used to implement a popcorn style combat tracker in your Foundry VTT system.
+A module providing Combat, Combatant and CombatTracker classes compatible with Foundry v9 that can be used to implement a popcorn style combat tracker in your Foundry VTT system.
 
 ## Instructions
 
@@ -12,7 +12,7 @@ Install with npm
 $ npm install lancer-initiative
 ```
 
-Create or copy the necessary handlebars templates. Examples can be found in the main [Lancer Intiative module repository](https://github.com/BoltsJ/lancer-initiative/tree/module-refactor/public/templates).
+Create or copy the necessary handlebars templates. Examples can be found in the main [Lancer Intiative module repository](https://github.com/BoltsJ/lancer-initiative/tree/default/public/templates).
 
 Css rules for the tracker can be found in the Lancer Intiative main repository, as well as an example configuration form.
 
