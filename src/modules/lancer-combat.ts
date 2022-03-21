@@ -40,11 +40,13 @@ export class LancerCombat extends Combat {
    */
   async resetActivations(): Promise<LancerCombatant[]> {
     const module = CONFIG.LancerInitiative.module;
+    const skipDefeated =
+      "skipDefeated" in this.settings && this.settings.skipDefeated;
     const updates = this.combatants.map(c => {
       return {
         _id: c.id,
         [`flags.${module}.activations.value`]:
-          this.settings.skipDefeated &&
+          skipDefeated &&
           (c.data.defeated ||
             !!c.actor?.effects.find(
               e =>
@@ -177,6 +179,9 @@ export class LancerCombatant extends Combatant {
     }
   }
 
+  /**
+   * @deprecated since v9
+   */
   override get isVisible(): boolean {
     // v8 compatibility
     const module = CONFIG.LancerInitiative.module;

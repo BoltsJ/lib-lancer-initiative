@@ -5,7 +5,7 @@ import type { LancerCombat, LancerCombatant } from "./lancer-combat.js";
  * buttons and either move or remove the initiative button
  */
 export class LancerCombatTracker extends CombatTracker {
-  static override get defaultOptions(): CombatTracker.Options {
+  static override get defaultOptions(): ApplicationOptions {
     return {
       ...super.defaultOptions,
       template: CONFIG.LancerInitiative.templatePath!,
@@ -19,7 +19,7 @@ export class LancerCombatTracker extends CombatTracker {
    * updateCombat events being eaten.
    */
   override async getData(
-    options?: Partial<CombatTracker.Options>
+    options?: Partial<ApplicationOptions>
   ): Promise<CombatTracker.Data> {
     const config = CONFIG.LancerInitiative;
     const appearance = getTrackerAppearance();
