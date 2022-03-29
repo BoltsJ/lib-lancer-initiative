@@ -70,7 +70,7 @@ Hooks.on("init", () => {
   });
 
   // Recommended to allow integrations to set up
-  Hooks.callAll("LancerIntitiativeInit");
+  Hooks.callAll("LancerInitiativeInit");
   setAppearance(getTrackerAppearance());
 });
 ```
