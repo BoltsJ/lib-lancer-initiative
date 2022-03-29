@@ -78,7 +78,8 @@ export class LancerCombat extends Combat {
 
   override async resetAll(): Promise<this | undefined> {
     await this.resetActivations();
-    return super.resetAll();
+    this.combatants.forEach(c => c.data.update({ initiative: null }));
+    return this.update({ turn: null, combatants: this.combatants.toObject() });
   }
 
   /**
