@@ -11,7 +11,7 @@
     "types": ["@league-of-foundry-developers/foundry-vtt-types"],
     "moduleResolution": "node",
     "strict": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "importHelpers": true,
     "importsNotUsedAsValues": "error",
     "noImplicitOverride": true,
