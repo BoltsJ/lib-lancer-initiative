@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "es2022",
     "outDir": "./dist/",
     "module": "es6",
     "sourceMap": true,
     "inlineSources": true,
     "declarationMap": true,
     "declarationDir": "./dist/",
-    "lib": ["ES6", "ES2017", "DOM"],
+    "lib": ["ES6", "ES2022", "DOM"],
     "types": ["@league-of-foundry-developers/foundry-vtt-types"],
     "moduleResolution": "node",
     "strict": true,
