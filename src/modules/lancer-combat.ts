@@ -233,15 +233,6 @@ export class LancerCombatant extends Combatant {
 }
 
 /**
- * Hook this on ready to migrate existing combats
- * This no longer does anything as dummy combatants are no longer used.
- * @deprecated since 2.0.0
- */
-export function addMissingDummy(): void {
-  return;
-}
-
-/**
  * Interface for the activations object
  */
 interface Activations {
