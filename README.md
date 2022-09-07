@@ -59,15 +59,23 @@ Hooks.on("init", () => {
     type: Object,
     onChange: setAppearance,
   });
+  // Optional for systems
   game.settings.register(game.system.id, "combat-tracker-sort", {
-    name: game.i18n.localize("LANCERINITIATIVE.SortTracker"),
-    hint: game.i18n.localize("LANCERINITIATIVE.SortTrackerDesc"),
+    name: "LANCERINITIATIVE.SortTracker",
+    hint: "LANCERINITIATIVE.SortTrackerDesc",
     scope: "world",
     config: true,
     type: Boolean,
-    onChange: () => game.combats?.render(),
+    onChange: v => {
+      CONFIG.LancerInitiative.sort = v;
+      game.combats?.render();
+    },
     default: false,
   });
+  CONFIG.LancerInitiative.sort = game.settings.get(
+    game.system.id,
+    "combat-tracker-sort"
+  );
 
   // Recommended to allow integrations to set up
   Hooks.callAll("LancerInitiativeInit");

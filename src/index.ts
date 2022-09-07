@@ -72,6 +72,15 @@ export interface LancerInitiativeConfig<T extends string = string> {
    * @defaultValue `false`
    */
   enable_initiative?: boolean;
+  /**
+   * Whether to sort the displayed combat tracker based on activation status.
+   * If enabled, the active unit is displayed on the top and units that have
+   * used all their activations are sorted to the bottom. Only needed if
+   * LancerCombatTracker or a subclass is used and sorting is not wanted, or
+   * the ability to toggle it is desired.
+   * @defaultValue `true`
+   */
+  sort?: boolean;
 }
 
 export function setAppearance(

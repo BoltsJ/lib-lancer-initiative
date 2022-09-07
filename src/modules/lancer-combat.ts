@@ -77,7 +77,7 @@ export class LancerCombat extends Combat {
     await this.resetActivations();
     // @ts-expect-error v10
     this.combatants.forEach(c => c.updateSource({ initiative: null }));
-    return this.update({ turn: null, combatants: this.combatants.toObject() });
+    return this.update({ turn: null, combatants: this.combatants.toObject() }, { diff: false });
   }
 
   /**
