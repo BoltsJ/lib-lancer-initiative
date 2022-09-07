@@ -1,6 +1,6 @@
 {
   "name": "lancer-initiative",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Node module for a popcorn style combat tracker in Foundry VTT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
