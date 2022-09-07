@@ -164,7 +164,10 @@ export class LancerCombatant extends Combatant {
           break;
       }
       this.data.update({
-        [`flags.${module}.activations`]: { max: activations },
+        [`flags.${module}.activations`]: {
+          max: activations,
+          value: (this.parent?.round ?? 0) > 0 ? activations : 0,
+        },
       });
     }
   }
