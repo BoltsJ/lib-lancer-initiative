@@ -32,10 +32,7 @@ export class LancerCombatTracker extends CombatTracker {
       }[];
       [x: string]: unknown;
     };
-    const sort = game.settings.get(
-      config.module,
-      "combat-tracker-sort"
-    ) as boolean;
+    const sort = config.sort ?? true;
     const disp: Record<number, string> = {
       [-2]: "",
       [-1]: "enemy",
