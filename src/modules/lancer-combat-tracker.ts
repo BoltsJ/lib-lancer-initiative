@@ -12,6 +12,12 @@ export class LancerCombatTracker extends CombatTracker {
     };
   }
 
+  override scrollToTurn(): void {
+    if (this.viewed?.turn == null || !(CONFIG.LancerInitiative?.sort ?? true))
+      return super.scrollToTurn();
+    this.element.find("ol#combat-tracker")[0].scrollTop = 0;
+  }
+
   /**
    * Intercepts the data being sent to the combat tracker window and
    * optionally sorts the the turn data that gets displayed. This allows the
