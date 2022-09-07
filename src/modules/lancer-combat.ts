@@ -17,7 +17,8 @@ export class LancerCombat extends Combat {
   protected override async _preCreate(
     ...[data, options, user]: Parameters<Combat["_preCreate"]>
   ): Promise<void> {
-    this.data.update({ turn: null });
+    // @ts-expect-error v10
+    this.updateSource({ turn: null });
     return super._preCreate(data, options, user);
   }
 
@@ -32,12 +33,7 @@ export class LancerCombat extends Combat {
       return {
         _id: c.id,
         [`flags.${module}.activations.value`]:
-          skipDefeated &&
-          (c.data.defeated ||
-            !!c.actor?.effects.find(
-              e =>
-                e.getFlag("core", "statusId") === CONFIG.Combat.defeatedStatusId
-            ))
+          skipDefeated && c.isDefeated
             ? 0
             : (<LancerCombatant>c).activations.max ?? 0,
       };
@@ -54,10 +50,11 @@ export class LancerCombat extends Combat {
 
   override async nextRound(): Promise<this | undefined> {
     await this.resetActivations();
-    let advanceTime = Math.max(this.turns.length - (this.data.turn || 0), 0) * CONFIG.time.turnTime;
+    let advanceTime =
+      Math.max(this.turns.length - (this.turn || 0), 0) * CONFIG.time.turnTime;
     advanceTime += CONFIG.time.roundTime;
     // @ts-ignore jtfc advanceTime is fucking used in foundry.js
-    return this.update({round: this.round + 1, turn: null}, {advanceTime});
+    return this.update({ round: this.round + 1, turn: null }, { advanceTime });
   }
 
   /**
@@ -78,7 +75,8 @@ export class LancerCombat extends Combat {
 
   override async resetAll(): Promise<this | undefined> {
     await this.resetActivations();
-    this.combatants.forEach(c => c.data.update({ initiative: null }));
+    // @ts-expect-error v10
+    this.combatants.forEach(c => c.updateSource({ initiative: null }));
     return this.update({ turn: null, combatants: this.combatants.toObject() });
   }
 
@@ -144,7 +142,7 @@ export class LancerCombatant extends Combatant {
     const module = CONFIG.LancerInitiative.module;
     if (
       // @ts-expect-error
-      this.data.flags?.[module]?.activations?.max === undefined &&
+      this.flags?.[module]?.activations?.max === undefined &&
       canvas?.ready
     ) {
       let activations: number;
@@ -163,7 +161,8 @@ export class LancerCombatant extends Combatant {
           activations = 1;
           break;
       }
-      this.data.update({
+      // @ts-expect-error v10
+      this.updateSource({
         [`flags.${module}.activations`]: {
           max: activations,
           value: (this.parent?.round ?? 0) > 0 ? activations : 0,
@@ -191,8 +190,10 @@ export class LancerCombatant extends Combatant {
       <number>this.getFlag(module, "disposition") ??
       (this.actor?.hasPlayerOwner ?? false
         ? 2
-        : this.token?.data.disposition ??
-          this.actor?.data.token.disposition ??
+        : // @ts-expect-error v10
+          this.token?.disposition ??
+          // @ts-expect-error v10
+          this.actor?.prototypeToken.disposition ??
           -2)
     );
   }
